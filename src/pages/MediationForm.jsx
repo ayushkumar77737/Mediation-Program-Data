@@ -177,8 +177,13 @@ function MediationForm() {
                         type={dob ? "date" : "text"}
                         value={dob}
                         placeholder="Select Date of Birth"
-                        onFocus={(e) => e.target.type = "date"}
-                        onBlur={(e) => { if (!dob) e.target.type = "text" }}
+                        onClick={(e) => {
+                            e.target.type = "date";
+                            e.target.showPicker();   // opens calendar instantly
+                        }}
+                        onBlur={(e) => {
+                            if (!dob) e.target.type = "text";
+                        }}
                         onChange={(e) => setDob(e.target.value)}
                         required
                     />
