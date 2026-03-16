@@ -178,9 +178,7 @@ function MediationForm() {
                         value={dob}
                         placeholder="Select Date of Birth"
                         onFocus={(e) => e.target.type = "date"}
-                        onBlur={(e) => {
-                            if (!dob) e.target.type = "text";
-                        }}
+                        onBlur={(e) => { if (!dob) e.target.type = "text" }}
                         onChange={(e) => setDob(e.target.value)}
                         required
                     />
