@@ -162,7 +162,7 @@ function MediationForm() {
                         required
                     />
 
-                    <label>Mobile Number</label>
+                    <label>mobile Number</label>
                     <input
                         type="text"
                         value={mobile}
