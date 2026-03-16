@@ -86,6 +86,8 @@ function MediationForm() {
 
         try {
 
+            /* Check duplicate ID */
+
             const docRef = doc(db, "mediationUsers", idno);
             const docSnap = await getDoc(docRef);
 
@@ -93,6 +95,8 @@ function MediationForm() {
                 showError("This ID already exists");
                 return;
             }
+
+            /* Check duplicate Mobile */
 
             const mobileQuery = query(
                 collection(db, "mediationUsers"),
@@ -105,6 +109,8 @@ function MediationForm() {
                 showError("This mobile number already exists");
                 return;
             }
+
+            /* Save data */
 
             await setDoc(docRef, {
                 name,
@@ -158,7 +164,7 @@ function MediationForm() {
 
                     <label>Mobile Number</label>
                     <input
-                        type="tel"
+                        type="text"
                         value={mobile}
                         onChange={handleMobileChange}
                         placeholder="Enter Mobile Number"
@@ -168,11 +174,13 @@ function MediationForm() {
 
                     <label>Date of Birth</label>
                     <input
-                        type="date"
+                        type={dob ? "date" : "text"}
                         value={dob}
+                        placeholder="Select Date of Birth"
+                        onFocus={(e) => e.target.type = "date"}
+                        onBlur={(e) => { if (!dob) e.target.type = "text" }}
                         onChange={(e) => setDob(e.target.value)}
                         required
-                        className="date-input"
                     />
 
                     <button type="submit">Submit</button>

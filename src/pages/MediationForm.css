@@ -258,19 +258,3 @@ text-align:center;
 font-weight:600;
 animation:fadeIn 0.5s ease;
 }
-/* DATE INPUT PLACEHOLDER STYLE */
-
-.date-input:invalid{
-color:#888;
-}
-
-.date-input:before{
-content:"Select Date of Birth";
-color:#888;
-position:absolute;
-}
-
-.date-input:focus:before,
-.date-input:not(:invalid):before{
-content:"";
-}
