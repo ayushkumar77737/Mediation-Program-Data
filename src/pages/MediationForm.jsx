@@ -7,135 +7,116 @@ import {
     doc,
     setDoc,
     getDoc,
-    serverTimestamp,
-    collection,
-    query,
-    where,
-    getDocs
+    serverTimestamp
 } from "firebase/firestore";
 
 function MediationForm() {
 
-    const [name, setName] = useState("");
-    const [idno, setIdno] = useState("");
-    const [dob, setDob] = useState("");
-    const [mobile, setMobile] = useState("");
-    const [message, setMessage] = useState("");
-    const [error, setError] = useState("");
+    const [name,setName]=useState("");
+    const [idno,setIdno]=useState("");
+    const [dob,setDob]=useState("");
+    const [mobile,setMobile]=useState("");
+    const [message,setMessage]=useState("");
+    const [error,setError]=useState("");
 
-    const clearFields = () => {
+    const clearFields=()=>{
         setName("");
         setIdno("");
         setDob("");
         setMobile("");
     };
 
-    const showError = (msg) => {
+    const showError=(msg)=>{
         setError(msg);
         clearFields();
-        setTimeout(() => { setError("") }, 5000);
+        setTimeout(()=>{setError("")},5000);
     };
 
-    const showSuccess = (msg) => {
+    const showSuccess=(msg)=>{
         setMessage(msg);
-        setTimeout(() => { setMessage("") }, 5000);
+        setTimeout(()=>{setMessage("")},5000);
     };
 
-    const handleNameChange = (e) => {
-        let value = e.target.value.toUpperCase().replace(/[^A-Z ]/g, "");
+    const handleNameChange=(e)=>{
+        let value=e.target.value.toUpperCase().replace(/[^A-Z ]/g,"");
         setName(value);
     };
 
-    const handleIdChange = (e) => {
-        let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-        if (value.length <= 4) {
+    const handleIdChange=(e)=>{
+        let value=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+        if(value.length<=4){
             setIdno(value);
         }
     };
 
-    const handleMobileChange = (e) => {
-        let value = e.target.value.replace(/[^0-9]/g, "");
+    const handleMobileChange=(e)=>{
+        let value=e.target.value.replace(/[^0-9]/g,"");
         setMobile(value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit=async(e)=>{
         e.preventDefault();
 
-        const idPattern = /^[A-Z]{1}[0-9]{3}$/;
-        const mobilePattern = /^[0-9]{10}$/;
+        const idPattern=/^[A-Z]{1}[0-9]{3}$/;
+        const mobilePattern=/^[0-9]{10}$/;
 
-        if (name.trim() === "") {
+        if(name.trim()===""){
             showError("Name is required");
             return;
         }
 
-        if (!idPattern.test(idno)) {
+        if(!idPattern.test(idno)){
             showError("ID must be 1 letter + 3 numbers (Example A123)");
             return;
         }
 
-        if (!mobilePattern.test(mobile)) {
+        if(!mobilePattern.test(mobile)){
             showError("Mobile number must be exactly 10 digits");
             return;
         }
 
-        if (!dob) {
+        if(!dob){
             showError("Please select Date of Birth");
             return;
         }
 
-        try {
+        try{
 
             /* Check duplicate ID */
 
-            const docRef = doc(db, "mediationUsers", idno);
-            const docSnap = await getDoc(docRef);
+            const docRef=doc(db,"mediationUsers",idno);
+            const docSnap=await getDoc(docRef);
 
-            if (docSnap.exists()) {
+            if(docSnap.exists()){
                 showError("This ID already exists");
-                return;
-            }
-
-            /* Check duplicate Mobile */
-
-            const mobileQuery = query(
-                collection(db, "mediationUsers"),
-                where("mobile", "==", mobile)
-            );
-
-            const mobileSnap = await getDocs(mobileQuery);
-
-            if (!mobileSnap.empty) {
-                showError("This mobile number already exists");
                 return;
             }
 
             /* Save data */
 
-            await setDoc(docRef, {
+            await setDoc(docRef,{
                 name,
                 idno,
                 mobile,
                 dob,
-                createdAt: serverTimestamp()
+                createdAt:serverTimestamp()
             });
 
             showSuccess("Form Data Successfully Submitted");
 
             clearFields();
 
-        } catch (error) {
+        }catch(error){
             console.error(error);
             showError("Error saving data");
         }
-
     };
 
-    return (
+    return(
         <div className="page-container">
 
             <div className="image-card">
-                <img src={mediationImg} alt="meditation" />
+                <img src={mediationImg} alt="meditation"/>
             </div>
 
             <div className="form-card">
@@ -174,17 +155,17 @@ function MediationForm() {
 
                     <label>Date of Birth</label>
                     <input
-                        type={dob ? "date" : "text"}
+                        type={dob?"date":"text"}
                         value={dob}
                         placeholder="Select Date of Birth"
-                        onClick={(e) => {
-                            e.target.type = "date";
-                            e.target.showPicker();   // opens calendar instantly
+                        onClick={(e)=>{
+                            e.target.type="date";
+                            e.target.showPicker();
                         }}
-                        onBlur={(e) => {
-                            if (!dob) e.target.type = "text";
+                        onBlur={(e)=>{
+                            if(!dob)e.target.type="text";
                         }}
-                        onChange={(e) => setDob(e.target.value)}
+                        onChange={(e)=>setDob(e.target.value)}
                         required
                     />
 
